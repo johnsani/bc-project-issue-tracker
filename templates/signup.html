@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Signup</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+</head>
+<body>
+   <section class="container">
+    <div class="login">
+      <h1>Create an account</h1>
+      <form method="post" action="/signup">
+        <p style = "color:red">{{ msg }}</p>
+        <p><input type="text" name="fname" value="" placeholder="firstname"></p>
+        <p><input type="text" name="lname" value="" placeholder="lastname"></p>
+        <p><input type="text" name="email" value="" placeholder="Email"></p>
+        <p><input type="text" name="department" value="" placeholder="department"></p>
+        <p><input type="password" name="password" value="" placeholder="Password"></p>
+        <p class="remember_me">
+          <label>
+            <input type="checkbox" name="remember_me" id="remember_me">
+            Remember me on this computer
+          </label>
+        </p>
+        <p class="submit"><input type="submit" name="commit" value="Create Account"></p>
+      </form>
+      <a href = "{{url_for('index')}}" >Go back to home page</a>
+    </div>
+  </section>
+
+</body>
+</html>
