@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Page</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+</head>
+<body>
+   <section class="container">
+    <div class="login">
+      <h1>Report Issue</h1>
+      <p style = "color:red">{{ msg }}</p>
+      <form method="post" action="/create">
+         Name<br>
+         <input type = "text" name = "name" /></br>
+         Department<br>
+         <input type = "text" name = "department" /></br>         
+         Description<br>
+         <textarea name = "issue" ></textarea><br>
+         Priority<br>
+        <select name="priority">
+          <option value = "critical">Critical</option>
+          <option value = "Urgent">Urgent</option>
+          <option value ="important">Important</option>
+          <option value="normal">Normal</option>
+        </select>
+        <br>
+         Date<br>
+            <input type = "date" name = "date"/>
+        <br>
+         <input type = "submit" value = "Report" /><br>
+      </form>
+      <br>
+      <a href = "{{url_for('index')}}" >Go back to home page</a>
+      <p class="lead" style="text-align: right"><a href="{{url_for('logout')}}">Logout</a></p>
+    </div>
+</body>
+</html>
