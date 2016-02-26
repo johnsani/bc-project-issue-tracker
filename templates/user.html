@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+</head>
+<body>
+  <p style = "color:red">{{ msg }}</p>
+   <section class="container">
+    <div class="login">
+      <h1>Welcome!</h1>
+          <ul class="nav navbar-nav">
+                <li>
+                    <a href="{{url_for('create')}}">Report Issue</a>
+                </li>
+                <li>
+                    <a href="{{url_for('reports')}}">View Reports</a>
+                </li>
+                <li>
+                    <a href="#">Search</a>
+                </li>
+                <li>
+                    <p class="lead"><a href="{{url_for('logout')}}">Logout</a></p>
+                </li>
+
+            </ul>
+    </div>
+  </section>
+</body>
+</html>
