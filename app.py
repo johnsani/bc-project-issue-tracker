@@ -4,27 +4,31 @@ from flask import session, g
 import sqlite3
 
 app = Flask(__name__)
-#Secret key to make sure the session is secure.
+# Secret key to make sure the session is secure.
 app.secret_key = '\xc36\x87F\xd9\xa2\x83\x9a\xa1Q1lg3\xe8\x118D\xbe\xae%\xa9^$'
 
+
 @app.before_request
-#Connects to the database after every request.
+# Connects to the database after every request.
 def before_request():
     g.db = sqlite3.connect("issuetracker.db")
+
+
 @app.teardown_request
-#Closes the databse after each request
+# Closes the databse after each request
 def teardown_request(exception):
     if (hasattr(g, 'db')):
         g.db.close()
 
+
 @app.route('/')
-#Route to the index page
+# Route to the index page
 def index():
     return render_template('index.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
-#Create new user
+# Create new user
 def signup():
     if request.method == 'POST':
         try:
@@ -35,7 +39,7 @@ def signup():
             department = request.form['department']
             g.db.execute("INSERT INTO users \
                 (fname, lname, email, department, password)VALUES (?,?,?,?,?)",
-                (firstname, lastname, email, department, password))
+                         (firstname, lastname, email, department, password))
             g.db.commit()
             msg = "Account created successfully!"
             return render_template('signup.html', msg=msg)
@@ -47,14 +51,13 @@ def signup():
 
 
 @app.route('/login', methods=['GET', 'POST'])
-#Logs a user in and returns the user tempalate
+# Logs a user in and returns the user tempalate
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        db_email = g.db.execute("SELECT email FROM users")
-        db_pass = g.db.execute("SELECT password FROM users")
-        if email in db_email and password in db_pass:
+        records = g.db.execute("SELECT email, password FROM users").fetchall()
+        if email in records and password in records:
             return redirect(url_for('user'))
         else:
             msg = "Invalid login details!"
@@ -62,33 +65,49 @@ def login():
     else:
         return render_template('login.html')
 
+
 @app.route('/logout')
-#Logs a user out
+# Logs a user out
 def logout():
     session.pop('logged_in', None)
     return redirect(url_for('index'))
 
 
 @app.route('/admin', methods=['GET', 'POST'])
-#returns template for the admin
+# returns template for the admin
 def admin():
     return render_template('admin.html')
 
 
 @app.route('/user', methods=['GET', 'POST'])
-#Takes the user to the user page when logged in
+# Takes the user to the user page when logged in
 def user():
     message = "Welcome "
     return render_template('user.html', message=message)
 
-@app.route('/create', methods=['GET', 'POST'])
-#Function for reporting new issues
-def create():
-    return render_template('create.html')
 
+@app.route('/create', methods=['GET', 'POST'])
+# Function for reporting new issues
+def create():
+    if request.method == 'POST':
+        try:
+            names = request.form['name']
+            issues = request.form['issue']
+            departments = request.form['department']
+            priorit = request.form['priority']
+            dates = request.form['date']
+            g.db.execute('INSERT INTO users (name, issue, department, priority, date)VALUES (?,?,?,?,?)',(names, issues, departments, priorit, dates))
+            g.db.commit()
+            msg = "Report created successfully!"
+            return render_template('user.html', msg=msg)
+        except:
+            msg = "error while submitting report!"
+            return render_template('create.html', msg=msg)
+    else:
+        return render_template('create.html')
 
 @app.route('/reports', methods=['GET', 'POST'])
-#Retuns issues reported from the database
+# Retuns issues reported from the database
 def reports():
     return render_template('reports.html')
 
